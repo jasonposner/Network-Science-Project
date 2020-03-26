@@ -1,4 +1,9 @@
 TO DO
 
-Search songs in albums.
-Find songs based on popularity.
+Clarify the data we are looking for. Is it...
+  - Top 100 songs each year from X to 2019?
+  - Top songs from each artist?
+Note: it looks like spotipy can't filter by popularity outside of albums.
+
+Implement searching for song by URI, if possible.
+Implement finding song based on popularity, if possible.
