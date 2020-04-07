@@ -1,18 +1,1 @@
 TO DO
-
-Spotipy does not seem to work how we want it to. Here's some other solutions:
-
-1. Billboard R&B/Hip Hop - Top Songs
-  By using Billboard instead of spotify, we get access to music from 2002
-  to 2019, and we can focus on the R&B Hip Hop Genres. We would also get
-  access to someone else's web scraper for the billboard hot 100, which
-  we could repurpose to this.
-  LINKS:
-    https://www.billboard.com/charts/year-end/2009/hot-r-and-and-b-hip-hop-songs
-    https://github.com/jsubroto/billboard-hot-100-web-scraper
-
-2. Spotify Charts - Fetch from 1/1/17 to date.
-  We could use spotify charts if all else fails. It has a built in download CSV
-  option we could use.
-  LINKS:
-    https://spotifycharts.com/regional
