@@ -4,7 +4,7 @@ performerColumn = []
 
 # only fetch the artists
 with open('hot_stuff_complete.csv', newline='\n') as csvfile:
-     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
      for row in spamreader:
          performer = row[4]
          # see if first char is a space
@@ -22,20 +22,20 @@ with open('hot_stuff_complete.csv', newline='\n') as csvfile:
 # filter out repeated appearances
 performers = []
 
-for p in performerColumn:
-    if p not in performers and p != 'Performer':
-        performers.append(p)
+# for p in performerColumn:
+#     if p not in performers and p != 'Performer':
+#         performers.append(p)
 
 # sort performers before we put them in the new csv
-performers.sort()
-
-# write a csv that contains only performers
-with open('performers.csv', 'w', newline='\n') as csvfile:
-    spamwriter = csv.writer(csvfile, delimiter=',')
-    index = 0
-    while index < len(performers):
-        spamwriter.writerow([performers[index]])
-        index += 1
+# performers.sort()
+#
+# # write a csv that contains only performers
+# with open('performers.csv', 'w', newline='\n') as csvfile:
+#     spamwriter = csv.writer(csvfile, delimiter=',')
+#     index = 0
+#     while index < len(performers):
+#         spamwriter.writerow([performers[index]])
+#         index += 1
 
 # if performers have collaborated, put them in the same row
 
