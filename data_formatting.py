@@ -3,11 +3,21 @@ import csv
 performerColumn = []
 
 # only fetch the artists
-with open('hot_stuff_25.csv', newline='\n') as csvfile:
+with open('hot_stuff_complete.csv', newline='\n') as csvfile:
      spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
      for row in spamreader:
-         performerColumn.append(row[4])
-
+         performer = row[4]
+         # see if first char is a space
+         if performer[0] == ' ':
+             index = 0
+             # iterate through string to find first char
+             while(index < len(performer)):
+                if performer[index] != ' ':
+                    # redefine performer to not include first space
+                    performer = performer[index:]
+                    break
+                index += 1
+         performerColumn.append(performer)
 
 # filter out repeated appearances
 performers = []
@@ -18,8 +28,6 @@ for p in performerColumn:
 
 # sort performers before we put them in the new csv
 performers.sort()
-print(performers)
-print(performers[1])
 
 # write a csv that contains only performers
 with open('performers.csv', 'w', newline='\n') as csvfile:
@@ -30,3 +38,7 @@ with open('performers.csv', 'w', newline='\n') as csvfile:
         index += 1
 
 # if performers have collaborated, put them in the same row
+
+# for p in performers:
+#     if "Feat." in p or "feat." in p or "Featuring" in p:
+#         print(p)
