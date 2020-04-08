@@ -1,5 +1,3 @@
 TO DO
 
-Arrange data in such a way that we can use the music_network code.
-Maybe we should only have one artist per row, where all other entries
-are collaborations?
+Implement music_network to project.
