@@ -21,14 +21,14 @@ And we downloaded the resulting data as "performers.csv"
 Unfortunately, lots of bands have collaborative keywords in them.
 
 - Earth, Wind & Fire
-- The Wing And A Prayer Fife & Drum Corps\n
+- The Wing And A Prayer Fife & Drum Corps
 
 And sometimes, groups like these collaborate with others...
-- Earth, Wind & Fire & The Emotions\n
+- Earth, Wind & Fire & The Emotions
 
 Should be...
 
-- (Earth, Wind & Fire) & The Emotions\n
+- (Earth, Wind & Fire) & The Emotions
 
 This made it hard to have python do absolutely all the work when we decided to split the artists into main and sub. We manually sorted through many bands, deciding which were names and which were collaborations.
 
