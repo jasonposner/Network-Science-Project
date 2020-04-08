@@ -6,7 +6,7 @@ import csv
 collaborators = []
 
 # create a list which considers only musicians who collaborate
-with open('performers_25.csv', newline='') as csvfile:
+with open('performers.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter='\n', quotechar='|')
     index = 0
     for row in spamreader:
