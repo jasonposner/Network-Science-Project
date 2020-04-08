@@ -35,7 +35,7 @@ def initEdges(songs, artists):
                         and not hasSongEdge(artist1, artist2, song['number'])):
                         G.add_edge(artist1, artist2,
                                     song_num = song['number'])
-          
+
 def getShortestPathLength(artist1, artist2):
     path = nx.shortest_path(artist1, artist2)
     return len(path) - 1 # Don't include the source
@@ -43,7 +43,7 @@ def getShortestPathLength(artist1, artist2):
 def getOutgoingEdges(artist):
     return len(list(G[artist]))
 
-# Gets most outgoing edges of 
+# Gets most outgoing edges of
 def getMostCollaborativeArtist():
     max_edges = 0
     most_collaborative_artist = ''
@@ -52,14 +52,14 @@ def getMostCollaborativeArtist():
             max_edges = getOutgoingEdges(artist)
             most_collaborative_artist = artist
     return (most_collaborative_artist, max_edges)
-    
+
 def getMaxBetweenness():
     betweenness = nx.betweenness_centrality(G)
     max_betweenness_artist = max(betweenness)
     return (max_betweenness_artist, betweenness[max_betweenness_artist])
-    
 
-#Graph initialization:          
+
+#Graph initialization:
 G = nx.MultiGraph()
 artists = getArtists(songs)
 initVertices(artists)
