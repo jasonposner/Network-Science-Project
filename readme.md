@@ -24,7 +24,7 @@ Unfortunately, lots of bands have collaborative keywords in them.
 - Earth, Wind & Fire
 - The Wing And A Prayer Fife & Drum Corps
 
-This made it hard to have python do absolutely all the work when we decided to split the artists into main and sub. We manually sorted through many bands, deciding which were names and which were collaborations.
+\nThis made it hard to have python do absolutely all the work when we decided to split the artists into main and sub. We manually sorted through many bands, deciding which were names and which were collaborations.
 
 ### Python Scripting
 
