@@ -20,11 +20,17 @@ And we downloaded the resulting data as "performers.csv"
 ### Manual Checks
 Unfortunately, lots of bands have collaborative keywords in them.
 
-- 2Pac & K-Ci & JoJo
 - Earth, Wind & Fire
-- The Wing And A Prayer Fife & Drum Corps
+- The Wing And A Prayer Fife & Drum Corps\n
 
-\nThis made it hard to have python do absolutely all the work when we decided to split the artists into main and sub. We manually sorted through many bands, deciding which were names and which were collaborations.
+And sometimes, groups like these collaborate with others...
+- Earth, Wind & Fire & The Emotions\n
+
+Should be...
+
+- (Earth, Wind & Fire) & The Emotions\n
+
+This made it hard to have python do absolutely all the work when we decided to split the artists into main and sub. We manually sorted through many bands, deciding which were names and which were collaborations.
 
 ### Python Scripting
 
