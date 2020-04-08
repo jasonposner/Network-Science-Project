@@ -39,3 +39,10 @@ Removes all artists who did not have "&" in their row. Before running this, we a
 
 #### Ampersand_Cleaner.py
 Transforms a row with many features into many rows with one feature per row. This scripting step was done to make the __music_network.py__ implementation easier. After one last run through of the keyword "and", we saved this data in the "FINAL_DATA" folder. The results can be seen in the "FINAL_DATA" folder.
+
+#### Duplicate_Remover.py
+We noticed that even though we created a list of unique artists, some were still repeating. This is due to the trailing whitespace and tabs that were entered in the "ampersand cleaner" step. We used the regular expression
+```
+[ \t]+$
+```
+in the text editor Atom to remove that white space. Then we ran duplicate_remover on the formatted set.
