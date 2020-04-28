@@ -86,6 +86,18 @@ def getMostCollaborativeArtist():
             most_collaborative_artist = artist
     return (most_collaborative_artist, max_edges)
 
+# Get top n Collaborative Aritsts
+def getTopCollaborativeArtists(n):
+    d = {}
+    for artist in artists:
+        d[artist] = getOutgoingEdges(artist)
+    keys = sorted(d, key=d.__getitem__)
+    keys = keys[-n:]
+    toret = {}
+    for key in keys:
+        toret[key] = d[key]
+    return toret
+
 def testedPairs(u,v, tested_pairs):
     return (u,v) in tested_pairs or (v,u) in tested_pairs
 
@@ -138,6 +150,15 @@ def getMaxBetweenness():
             max_betweenness_artist = artist
     return (max_betweenness_artist, betweenness[max_betweenness_artist])
 
+# Get n top betweenness artists
+def getTopBetweenness(n):
+    d = getBetweenness(G)
+    keys = sorted(d, key=d.__getitem__)
+    keys = keys[-n:]
+    toret = {}
+    for key in keys:
+        toret[key] = d[key]
+    return toret
 
 def normalizeValues(betweenness, n):
     # number of pairs is our normalization factor
