@@ -171,7 +171,7 @@ def normalizeValues(betweenness, n):
 #Graph initialization:          
 G = nx.MultiGraph()
 collabs = getData('ONLY_COLLABS_FINAL.csv')
-songs = initSongs(collabs)[:50]
+songs = initSongs(collabs)
 artists = getArtists(songs)
 initVertices(artists)
 initEdges(songs, artists)
