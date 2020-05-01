@@ -57,7 +57,6 @@ def initSongs(collabs):
         num += 1
     return songs
 
-
 def getArtists(songs):
     toret = set()
     for song in songs:
@@ -216,7 +215,6 @@ songs = initSongs(collabs)
 artists = getArtists(songs)
 initVertices(artists)
 initEdges(songs)
-
 
 #Graph Visualization:
 layout = nx.spring_layout(G)
