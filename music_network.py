@@ -137,8 +137,6 @@ def getTopNumberOfHits(n):
         toret[key] = d[key]
     return toret
             
-            
-
 # Betweenness Centrality:
 
 def getShortestPaths(G, u,v):
