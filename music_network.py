@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import random
+import itertools
 
 # Plot does not support dollar signs
 def removeDollarSigns(s):
@@ -14,7 +15,7 @@ def removeDollarSigns(s):
             toret += s[i]
     return toret
 
-def getData(filename):
+def formatData(filename):
     toret = []
     with open(filename, 'r') as csvfile:
         reader = csv.reader(csvfile)
@@ -31,13 +32,29 @@ def getRandomHexColor():
     color = '#' + color
     return color
 
-def initSongs(artists):
+# Assigns each song a unique color
+def createColorMap(collabs):
+    toret = dict()
+    used_colors = set() # Sets have average O(1) "in" lookup
+    for i in range(1, len(collabs) + 1):
+        # Get an unused hex color
+        color = getRandomHexColor()
+        while color in used_colors:
+            color = getRandomHexColor()
+        toret[i] = color
+    return toret
+        
+def initSongs(collabs):
     songs = []
-    for row in artists:
+    colors = createColorMap(collabs)
+    num = 1
+    for row in collabs:
         toadd = dict()
         toadd['artists'] = set(row)
-        toadd['color'] = getRandomHexColor()
+        toadd['color'] = colors[num]
+        toadd['song_num'] = num
         songs.append(toadd)
+        num += 1
     return songs
 
 
@@ -49,34 +66,32 @@ def getArtists(songs):
     toret = list(toret)
     return toret
 
-def hasSongEdge(artist1, artist2, song_num):
-    if not G.has_edge(artist1, artist2):
-        return False
-    for i in range(len(G[artist1][artist2])):
-        if G[artist1][artist2][i]['song_num'] == song_num:
-            return True
-    return False
-
+# Initializes vertices in the graph
 def initVertices(artists):
     for artist in artists:
         G.add_node(artist)
 
-def initEdges(songs, artists):
-    for artist1 in artists:
-        for song in songs:
-            if artist1 in song['artists']:
-                for artist2 in song['artists']:
-                    if (artist1 != artist2):
-                        G.add_edge(artist1, artist2, song['color'])
-          
+#Initialize edges in the graph, given vertices and songs calculated
+def initEdges(songs):
+    for song in songs:
+        # Get each 'pair' of artists in the song's listed artists
+        pairs = itertools.combinations(song['artists'], 2)
+        # For each pair, add a new edge with unique song color
+        for pair in pairs:
+            G.add_edge(pair[0], pair[1], song['color'])
+
+# Shortest Path:
+
 def getShortestPathLength(artist1, artist2):
     path = nx.shortest_path(artist1, artist2)
     return len(path) - 1 # Don't include the source
 
+# Degree/Outgoing Edges:
+
 def getOutgoingEdges(artist):
     return len(list(G[artist]))
 
-# Gets most outgoing edges of 
+# Gets most outgoing edges of the graph
 def getMostCollaborativeArtist():
     max_edges = 0
     most_collaborative_artist = ''
@@ -98,8 +113,33 @@ def getTopCollaborativeArtists(n):
         toret[key] = d[key]
     return toret
 
-def testedPairs(u,v, tested_pairs):
-    return (u,v) in tested_pairs or (v,u) in tested_pairs
+def getNumberOfHits(artist):
+    with open('performers.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        hits = 0
+        for row in reader:
+            tocheck = []
+            artists = row[0].split('&')
+            for performer in artists:
+                tocheck.append(removeDollarSigns(performer.strip()))
+            if artist in tocheck:
+                hits += 1
+        return hits
+
+def getTopNumberOfHits(n):
+    d = {}
+    for artist in artists:
+        d[artist] = getNumberOfHits(artist)
+    keys = sorted(d, key=d.__getitem__)
+    keys = keys[-n:]
+    toret = {}
+    for key in keys:
+        toret[key] = d[key]
+    return toret
+            
+            
+
+# Betweenness Centrality:
 
 def getShortestPaths(G, u,v):
     # See if we can get a path first
@@ -112,17 +152,20 @@ def getShortestPaths(G, u,v):
 
 def getBetweenness(G):
     betweenness = {}
+    V = []
     # Initialize to zero
     for v in G:
         betweenness[v] = 0.0
+        V.append(v)
+    i = 0
     # Choose each node as a source, get betweeness(s):
     for s in G:
+        i += 1
         b = 0
-        tested_pairs = []
+        pairs = list(itertools.combinations(list(G.nodes), 2))
         # For all pairs in G which we have not tested:
-        for u in G:
-            for v in G:
-                if u != s and  u != v and s != v and not testedPairs(u,v,tested_pairs):
+        for (u,v) in pairs:
+                if u != s and  u != v and s != v:
                     # Get all shortest paths
                     shortest_paths = getShortestPaths(G,u,v)
                     sigma_v = 0 # Paths passing through v
@@ -135,7 +178,6 @@ def getBetweenness(G):
                             sigma += 1
                     if sigma != 0:
                         b += sigma_v / sigma
-                    tested_pairs.append((u,v))
         betweenness[s] = b # Add to betweenenss
     betweeness = normalizeValues(betweenness, len(artists)) #Normalize
     return betweenness
@@ -168,13 +210,14 @@ def normalizeValues(betweenness, n):
         betweenness[v] = betweenness[v] * factor
     return betweenness
         
-#Graph initialization:          
+#Graph initialization:
+
 G = nx.MultiGraph()
-collabs = getData('ONLY_COLLABS_FINAL.csv')
+collabs = formatData('./FINAL_DATA/ONLY_COLLABS_FINAL.csv')[:50]
 songs = initSongs(collabs)
 artists = getArtists(songs)
 initVertices(artists)
-initEdges(songs, artists)
+initEdges(songs)
 
 
 #Graph Visualization:
@@ -195,7 +238,6 @@ for e in G.edges:
                                 ),
                 )
 plt.axis('off')
-nx.draw_networkx_labels(G, layout, font_size = 8)
+#nx.draw_networkx_labels(G, layout, font_size = 8)
 song_nums = nx.get_edge_attributes(G, 'song_num')
 plt.show()
-
