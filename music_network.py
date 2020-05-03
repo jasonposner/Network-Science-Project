@@ -161,7 +161,6 @@ def getBetweenness(G):
         V.append(v)
     # Choose each node as a source, get betweeness(s):
     for s in G:
-        i += 1
         b = 0
         pairs = list(itertools.combinations(list(G.nodes), 2))
         # For all pairs in G which we have not tested:
