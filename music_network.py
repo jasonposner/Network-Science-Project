@@ -82,8 +82,10 @@ def initEdges(songs):
 # Shortest Path:
 
 def getShortestPathLength(artist1, artist2):
-    path = nx.shortest_path(artist1, artist2)
-    return len(path) - 1 # Don't include the source
+    try:
+        return nx.dijkstra_path_length(G, artist1, artist2)
+    except nx.NetworkXNoPath:
+        return float("inf") # If no paths, return inf
 
 # Degree/Outgoing Edges:
 
@@ -154,7 +156,6 @@ def getBetweenness(G):
     for v in G:
         betweenness[v] = 0.0
         V.append(v)
-    i = 0
     # Choose each node as a source, get betweeness(s):
     for s in G:
         i += 1
@@ -206,10 +207,69 @@ def normalizeValues(betweenness, n):
     for v in betweenness:
         betweenness[v] = betweenness[v] * factor
     return betweenness
-        
+
+# Line graph analysis:
+
+def getBetweennessGraphData(G):
+    b = getBetweenness(G)
+    x = [] # x-axis (betweenness)
+    y = [] # y-axis (# of hits)
+    for artist in G:
+        x.append(b[artist])
+        y.append(getNumberOfHits(artist))
+    return x, y
+
+def makeBetweennessGraph(G):
+    x, y = getBetweennessGraphData(G)
+    plt.plot(x, y, 'ro')
+    plt.xlabel("Betweenness Centrality")
+    plt.ylabel("Number of Hits")
+    plt.show()
+
+def getCollaborationGraphData(G):
+    x = [] # x-axis (collaborations)
+    y = [] # y-axis (# of hits)
+    for artist in G:
+        x.append(getOutgoingEdges(artist))
+        y.append(getNumberOfHits(artist))
+    return x, y
+
+def makeCollaborationGraph(G):
+    x, y = getCollaborationGraphData(G)
+    plt.plot(x, y, 'ro')
+    plt.xlabel("Collaboraitons (degree)")
+    plt.ylabel("Number of Hits")
+    plt.show()
+
+# Shortest Path Analysis:
+
+# Analyzes "close artists" for the first 50 artists in full graph
+# You can adjust this to look at more artist, but the run time
+# will increase significantly
+def analyzeCloseArtists(G):
+    artists = [artists for artists in G]
+    artists = artists[:50]
+    pairs = itertools.combinations(artists, 2)
+    close_artists = []
+    for (u,v) in pairs:
+        if getShortestPathLength(u,v) <= 3:
+            close_artists.append((u,v))
+    for pair in close_artists:
+        print("Artists: ", pair)
+        print("Distance: ", getShortestPathLength(pair[0], pair[1]))
+        collabs0 = list(G[pair[0]])
+        collabs1 = list(G[pair[0]])
+        in_common_collabs = list(set(collabs0) & set(collabs1))
+        print("Collaborations in common:", in_common_collabs)
+        print()
+
+    
 #Graph initialization:
 
 G = nx.MultiGraph()
+# To test the code, it is recommended to use only the top 50
+# since a greater number of artists leads to very long wait
+# times for some of the data:
 collabs = formatData('./FINAL_DATA/ONLY_COLLABS_FINAL.csv')[:50]
 songs = initSongs(collabs)
 artists = getArtists(songs)
@@ -234,6 +294,6 @@ for e in G.edges:
                                 ),
                 )
 plt.axis('off')
-#nx.draw_networkx_labels(G, layout, font_size = 8)
+nx.draw_networkx_labels(G, layout, font_size = 8)
 song_nums = nx.get_edge_attributes(G, 'song_num')
 plt.show()
