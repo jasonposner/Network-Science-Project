@@ -149,6 +149,9 @@ def getShortestPaths(G, u,v):
     # Otherwise return all paths
     return nx.all_shortest_paths(G, u, v)
 
+# You may test correcteness by using this against the
+# nx.betweenness_centrality(G) function already implemented
+# by NetworkX (highly recommended to test with <100 nodes)
 def getBetweenness(G):
     betweenness = {}
     V = []
