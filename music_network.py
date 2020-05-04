@@ -5,6 +5,11 @@ import csv
 import random
 import itertools
 
+# Note: This program is set to only the first
+# 50 entries in the dataset in order
+# for the functions to be more
+# easily tested
+
 # Plot does not support dollar signs
 def removeDollarSigns(s):
     toret = ''
